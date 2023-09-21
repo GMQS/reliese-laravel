@@ -357,7 +357,7 @@ class Factory
 
         $comments = $model->getHints();
         foreach ($model->getProperties() as $name => $hint) {
-            $comment = $comments[$name] ?? '';
+            $comment = $comments[$name] ?? '[カラムの説明がありません]';
             $annotations .= $this->class->annotation('property-read', "$hint \$$name $comment");
         }
 

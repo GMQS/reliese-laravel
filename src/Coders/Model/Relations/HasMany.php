@@ -17,7 +17,7 @@ class HasMany extends HasOneOrMany
      */
     public function hint()
     {
-        return '\\'.Collection::class.'<int, '.$this->related->getQualifiedUserClassName().'>';
+        return "\\\\".Collection::class."<int, {$this->related->getQualifiedUserClassName()}> {$this->related->getQualifiedUserClassName()} モデルクラスのコレクション";
     }
 
     /**
