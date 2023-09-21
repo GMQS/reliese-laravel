@@ -355,7 +355,7 @@ class Factory
         $annotations = '';
 
         foreach ($model->getProperties() as $name => $hint) {
-            $annotations .= $this->class->annotation('property', "$hint \$$name");
+            $annotations .= $this->class->annotation('property-read', "$hint \$$name");
         }
 
         if ($model->hasRelations()) {
@@ -368,7 +368,7 @@ class Factory
             if ($model->hasProperty($name)) {
                 continue;
             }
-            $annotations .= $this->class->annotation('property', $relation->hint()." \$$name");
+            $annotations .= $this->class->annotation('property-read', $relation->hint()." \$$name");
         }
 
         return $annotations;
