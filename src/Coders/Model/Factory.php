@@ -456,19 +456,19 @@ class Factory
         }
 
         if ($model->hasCasts()) {
-            $body .= $this->class->field('casts', $model->getCasts(), ['before' => "\n"]);
+            $body .= $this->class->field('casts', $model->getCasts());
         }
 
         if ($model->hasHidden() && $model->doesNotUseBaseFiles()) {
-            $body .= $this->class->field('hidden', $model->getHidden(), ['before' => "\n"]);
+            $body .= $this->class->field('hidden', $model->getHidden());
         }
 
         if ($model->hasFillable() && ($model->doesNotUseBaseFiles() || $model->fillableInBaseFiles())) {
-            $body .= $this->class->field('fillable', $model->getFillable(), ['before' => "\n"]);
+            $body .= $this->class->field('fillable', $model->getFillable());
         }
 
         if ($model->hasHints() && $model->usesHints()) {
-            $body .= $this->class->field('hints', $model->getHints(), ['before' => "\n"]);
+            $body .= $this->class->field('hints', $model->getHints());
         }
 
         foreach ($model->getMutations() as $mutation) {

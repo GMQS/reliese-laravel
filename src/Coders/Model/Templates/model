@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace {{namespace}};
 
 {{imports}}
@@ -14,7 +10,6 @@ namespace {{namespace}};
  *
  * @package {{namespace}}
  */
-class {{class}} extends {{parent}}
-{
+class {{class}} extends {{parent}} {
 {{body}}
 }

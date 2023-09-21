@@ -50,11 +50,10 @@ class Classify
     public function field($name, $value, $options = [])
     {
         $value = Dumper::export($value);
-        $before = Arr::get($options, 'before', '');
         $visibility = Arr::get($options, 'visibility', 'protected');
         $after = Arr::get($options, 'after', "\n");
 
-        return "$before\t$visibility \$$name = $value;$after";
+        return "\n\t/** {@inheritDoc} */\n\t$visibility \$$name = $value;$after";
     }
 
     /**
@@ -70,7 +69,7 @@ class Classify
         $returnType = Arr::get($options, 'returnType', null);
         $formattedReturnType = $returnType ? ': '.$returnType : '';
 
-        return "\n\t$visibility function $name()$formattedReturnType\n\t{\n\t\t$body\n\t}\n";
+        return "\n\t$visibility function $name()$formattedReturnType {\n\t\t$body\n\t}\n";
     }
 
     public function mixin($class)
