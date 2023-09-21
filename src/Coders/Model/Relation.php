@@ -28,4 +28,9 @@ interface Relation
      * @return string
      */
     public function returnType();
+
+    /**
+     * @return string
+     */
+    public function docBlock();
 }

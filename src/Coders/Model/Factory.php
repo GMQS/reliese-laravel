@@ -475,11 +475,12 @@ class Factory
         }
 
         foreach ($model->getMutations() as $mutation) {
-            $body .= $this->class->method($mutation->name(), $mutation->body(), ['before' => "\n"]);
+            $body .= $this->class->method('', $mutation->name(), $mutation->body(), ['before' => "\n"]);
         }
 
         foreach ($model->getRelations() as $constraint) {
             $body .= $this->class->method(
+                $constraint->docBlock(),
                 $constraint->name(),
                 $constraint->body(),
                 [

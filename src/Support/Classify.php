@@ -57,19 +57,20 @@ class Classify
     }
 
     /**
+     * @param string $doc
      * @param string $name
      * @param string $body
      * @param array $options
      *
      * @return string
      */
-    public function method($name, $body, $options = [])
+    public function method($doc, $name, $body, $options = [])
     {
         $visibility = Arr::get($options, 'visibility', 'public');
         $returnType = Arr::get($options, 'returnType', null);
         $formattedReturnType = $returnType ? ': '.$returnType : '';
 
-        return "\n\t$visibility function $name()$formattedReturnType {\n\t\t$body\n\t}\n";
+        return "\n$doc\t$visibility function $name()$formattedReturnType {\n\t\t$body\n\t}\n";
     }
 
     public function mixin($class)

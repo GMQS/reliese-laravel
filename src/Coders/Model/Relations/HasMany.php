@@ -54,6 +54,19 @@ class HasMany extends HasOneOrMany
     /**
      * @return string
      */
+    public function docBlock()
+    {
+        return <<<EOL
+            /**
+             * @return \Illuminate\Database\Eloquent\Relations\HasMany<{$this->related->getQualifiedUserClassName()}>
+             */
+        
+        EOL;
+    }
+
+    /**
+     * @return string
+     */
     public function method()
     {
         return 'hasMany';

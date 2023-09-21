@@ -139,6 +139,19 @@ class BelongsToMany implements Relation
     /**
      * @return string
      */
+    public function docBlock()
+    {
+        return <<<EOL
+            /**
+             * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<{$this->reference->getQualifiedUserClassName()}>
+             */
+        
+        EOL;
+    }
+
+    /**
+     * @return string
+     */
     public function returnType()
     {
         return \Illuminate\Database\Eloquent\Relations\BelongsToMany::class;

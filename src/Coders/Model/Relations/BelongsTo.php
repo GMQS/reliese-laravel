@@ -116,6 +116,19 @@ class BelongsTo implements Relation
     /**
      * @return string
      */
+    public function docBlock()
+    {
+        return <<<EOL
+            /**
+             * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<{$this->related->getQualifiedUserClassName()}, {$this->parent->getQualifiedUserClassName()}>
+             */
+
+        EOL;
+    }
+
+    /**
+     * @return string
+     */
     public function hint()
     {
         $base =  $this->related->getQualifiedUserClassName();
