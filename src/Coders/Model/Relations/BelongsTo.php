@@ -135,13 +135,13 @@ class BelongsTo implements Relation
      */
     public function hint()
     {
-        $base = $this->related->getQualifiedUserClassName();
+        $base =  $this->related->getQualifiedUserClassName();
 
         if ($this->isNullable()) {
             $base .= '|null';
         }
 
-        return "{$base} {$this->related->getQualifiedUserClassName()} モデルクラスのインスタンス";
+        return $base;
     }
 
     /**

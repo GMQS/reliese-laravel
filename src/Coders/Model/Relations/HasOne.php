@@ -16,7 +16,7 @@ class HasOne extends HasOneOrMany
      */
     public function hint()
     {
-        return $this->related->getQualifiedUserClassName() . "{$this->related->getQualifiedUserClassName()} モデルクラスのインスタンス";
+        return $this->related->getQualifiedUserClassName();
     }
 
     /**
