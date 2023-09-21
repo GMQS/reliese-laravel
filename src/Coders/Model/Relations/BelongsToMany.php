@@ -69,7 +69,7 @@ class BelongsToMany implements Relation
      */
     public function hint()
     {
-        return '\\'.Collection::class.'|'.$this->reference->getQualifiedUserClassName().'[]';
+        return '\\'.Collection::class.'|list<'.$this->reference->getQualifiedUserClassName().'>';
     }
 
     /**
