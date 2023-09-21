@@ -391,6 +391,14 @@ class Model
     /**
      * @return string
      */
+    public function getDescription()
+    {
+        return "{$this->getClassName()}モデルクラス\n *\n * {$this->blueprint->comment()}";
+    }
+
+    /**
+     * @return string
+     */
     public function getTableForQuery()
     {
         return $this->shouldQualifyTableName()

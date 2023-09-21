@@ -252,6 +252,7 @@ class Factory
     {
         $template = str_replace('{{namespace}}', $model->getBaseNamespace(), $template);
         $template = str_replace('{{class}}', $model->getClassName(), $template);
+        $template = str_replace('{{description}}', $model->getDescription(), $template);
 
         $properties = $this->properties($model);
         $dependencies = $this->shortenAndExtractImportableDependencies($properties, $model);

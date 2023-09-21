@@ -5,7 +5,7 @@ namespace {{namespace}};
 {{imports}}
 
 /**
- * Class {{class}}
+ * {{description}}
  * {{properties}}
  *
  * @package {{namespace}}
