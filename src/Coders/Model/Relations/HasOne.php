@@ -38,6 +38,10 @@ class HasOne extends HasOneOrMany
     {
         return <<<EOL
             /**
+             * {$this->related->getQualifiedUserClassName()} モデルクラスに対する One To One リレーション
+             *
+             * {$this->parent->getQualifiedUserClassName()} (One) -> {$this->related->getQualifiedUserClassName()} (One)
+             *
              * @return \Illuminate\Database\Eloquent\Relations\HasOne<{$this->related->getQualifiedUserClassName()}>
              */
 

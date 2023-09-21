@@ -393,7 +393,7 @@ class Model
      */
     public function getDescription()
     {
-        return "{$this->getClassName()}モデルクラス\n *\n * {$this->blueprint->comment()}";
+        return "{$this->getClassName()} モデルクラス\n *\n * {$this->blueprint->comment()}";
     }
 
     /**

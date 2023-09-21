@@ -143,6 +143,10 @@ class BelongsToMany implements Relation
     {
         return <<<EOL
             /**
+             * {$this->reference->getQualifiedUserClassName()} モデルクラスに対する Many To Many リレーション
+             *
+             * {$this->parent->getQualifiedUserClassName()} (Many) -> {$this->reference->getQualifiedUserClassName()} (Many)
+             *
              * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<{$this->reference->getQualifiedUserClassName()}>
              */
         

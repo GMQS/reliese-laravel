@@ -120,6 +120,10 @@ class BelongsTo implements Relation
     {
         return <<<EOL
             /**
+             * {$this->related->getQualifiedUserClassName()} モデルクラスに対する Many To One リレーション
+             *
+             * {$this->parent->getQualifiedUserClassName()} (Many) -> {$this->related->getQualifiedUserClassName()} (One)
+             *
              * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<{$this->related->getQualifiedUserClassName()}, {$this->parent->getQualifiedUserClassName()}>
              */
 
