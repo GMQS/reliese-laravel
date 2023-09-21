@@ -58,7 +58,7 @@ abstract class HasOneOrMany implements Relation
      */
     public function body()
     {
-        $body = 'return $this->'.$this->method().'(';
+        $body = 'return parent::'.$this->method().'(';
 
         $body .= $this->related->getQualifiedUserClassName().'::class';
 

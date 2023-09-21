@@ -32,5 +32,10 @@ interface Relation
     /**
      * @return string
      */
-    public function docBlock();
+    public function methodDocument();
+
+    /**
+     * @return string
+     */
+    public function propertyComment();
 }

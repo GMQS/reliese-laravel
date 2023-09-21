@@ -54,7 +54,7 @@ class HasMany extends HasOneOrMany
     /**
      * @return string
      */
-    public function docBlock()
+    public function methodDocument()
     {
         return <<<EOL
             /**
@@ -66,6 +66,14 @@ class HasMany extends HasOneOrMany
              */
 
         EOL;
+    }
+
+    /**
+     * @return string
+     */
+    public function propertyComment()
+    {
+        return "{$this->parent->getQualifiedUserClassName()} (One) -> {$this->related->getQualifiedUserClassName()} (Many)";
     }
 
     /**

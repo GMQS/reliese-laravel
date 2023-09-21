@@ -371,7 +371,7 @@ class Factory
             if ($model->hasProperty($name)) {
                 continue;
             }
-            $annotations .= $this->class->annotation('property-read', $relation->hint()." \$$name");
+            $annotations .= $this->class->annotation('property-read', "{$relation->hint()} \${$name} {$relation->propertyComment()}");
         }
 
         return $annotations;
@@ -480,7 +480,7 @@ class Factory
 
         foreach ($model->getRelations() as $constraint) {
             $body .= $this->class->method(
-                $constraint->docBlock(),
+                $constraint->methodDocument(),
                 $constraint->name(),
                 $constraint->body(),
                 [

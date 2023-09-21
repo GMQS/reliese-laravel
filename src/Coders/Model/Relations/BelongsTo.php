@@ -75,7 +75,7 @@ class BelongsTo implements Relation
      */
     public function body()
     {
-        $body = 'return $this->belongsTo(';
+        $body = 'return parent::belongsTo(';
 
         $body .= $this->related->getQualifiedUserClassName().'::class';
 
@@ -116,7 +116,7 @@ class BelongsTo implements Relation
     /**
      * @return string
      */
-    public function docBlock()
+    public function methodDocument()
     {
         return <<<EOL
             /**
@@ -128,6 +128,14 @@ class BelongsTo implements Relation
              */
 
         EOL;
+    }
+
+    /**
+     * @return string
+     */
+    public function propertyComment()
+    {
+        return "{$this->parent->getQualifiedUserClassName()} (Many) -> {$this->related->getQualifiedUserClassName()} (One)";
     }
 
     /**

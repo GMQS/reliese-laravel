@@ -97,7 +97,7 @@ class BelongsToMany implements Relation
      */
     public function body()
     {
-        $body = 'return $this->belongsToMany(';
+        $body = 'return parent::belongsToMany(';
 
         $body .= $this->reference->getQualifiedUserClassName().'::class';
 
@@ -139,7 +139,7 @@ class BelongsToMany implements Relation
     /**
      * @return string
      */
-    public function docBlock()
+    public function methodDocument()
     {
         return <<<EOL
             /**
@@ -149,8 +149,16 @@ class BelongsToMany implements Relation
              *
              * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<{$this->reference->getQualifiedUserClassName()}>
              */
-        
+
         EOL;
+    }
+
+    /**
+     * @return string
+     */
+    public function propertyComment()
+    {
+        return "{$this->parent->getQualifiedUserClassName()} (Many) -> {$this->reference->getQualifiedUserClassName()} (Many)";
     }
 
     /**

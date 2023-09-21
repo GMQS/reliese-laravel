@@ -64,9 +64,17 @@ class HasOneOrManyStrategy implements Relation
     /**
      * @return string
      */
-    public function docBlock()
+    public function methodDocument()
     {
-        return $this->relation->docBlock();
+        return $this->relation->methodDocument();
+    }
+
+    /**
+     * @return string
+     */
+    public function propertyComment()
+    {
+        return $this->relation->propertyComment();
     }
 
     /**
