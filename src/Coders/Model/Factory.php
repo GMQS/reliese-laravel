@@ -354,8 +354,10 @@ class Factory
         // Process property annotations
         $annotations = '';
 
+        $comments = $model->getHints();
         foreach ($model->getProperties() as $name => $hint) {
-            $annotations .= $this->class->annotation('property-read', "$hint \$$name");
+            $comment = $comments[$name] ?? '';
+            $annotations .= $this->class->annotation('property-read', "$hint \$$name $comment");
         }
 
         if ($model->hasRelations()) {
@@ -481,7 +483,7 @@ class Factory
                 $constraint->body(),
                 [
                     'before' => "\n",
-                    'returnType' => $model->definesReturnTypes() ? $constraint->returnType() : null,
+                    'returnType' => $constraint->returnType(),
                 ]
             );
         }

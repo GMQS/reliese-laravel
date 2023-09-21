@@ -39,15 +39,15 @@ class Dumper
                     return static::export($value, $tabs + 1);
                 }
 
-                $key = static::hasStaticCall($key) ? $key : "'$key'";
+                $key = static::hasStaticCall($key) ? $key : "\"$key\"";
 
                 return "$key => ".static::export($value, $tabs + 1);
             }, $value, $keys);
 
-            return "[\n$indent".implode(",\n$indent", $array)."\n$closingIndent]";
+            return "[\n$indent".implode(",\n$indent", $array).",\n$closingIndent]";
         }
 
         // Default variable exporting
-        return static::hasStaticCall($value) ? $value : var_export($value, true);
+        return static::hasStaticCall($value) ? $value : str_replace("'" , "\"",var_export($value, true));
     }
 }

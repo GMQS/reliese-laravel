@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace {{namespace}};
 
@@ -10,6 +10,7 @@ namespace {{namespace}};
  *
  * @package {{namespace}}
  */
-class {{class}} extends {{parent}} {
+final class {{class}} extends {{parent}} {
+
 {{body}}
 }
