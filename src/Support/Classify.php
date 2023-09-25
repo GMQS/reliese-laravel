@@ -27,15 +27,26 @@ class Classify
      * Constant template.
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
+     * @param string $comment
+     * @param bool   $isFirst
      *
      * @return string
      */
-    public function constant($name, $value)
+    public function constant($name, $value, $comment, $isFirst = false)
     {
         $value = Dumper::export($value);
 
-        return "\tpublic const $name = $value;\n";
+        $full = $isFirst ? '' : "\n";
+        $full .= <<< EOL
+            /**
+             * {$comment}
+             */
+            public const {$name} = {$value};
+
+        EOL;
+
+        return $full;
     }
 
     /**

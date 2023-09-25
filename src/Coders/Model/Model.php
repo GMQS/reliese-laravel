@@ -280,6 +280,8 @@ class Model
         // Track comment hints
         if (! empty($column->comment)) {
             $this->hints[$column->name] = $column->comment;
+        } else {
+            $this->hints[$column->name] = '[カラムの説明がありません]';
         }
 
         // Track PHP type hints

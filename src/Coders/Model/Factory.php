@@ -357,7 +357,7 @@ class Factory
 
         $comments = $model->getHints();
         foreach ($model->getProperties() as $name => $hint) {
-            $comment = $comments[$name] ?? '[カラムの説明がありません]';
+            $comment = $comments[$name];
             $annotations .= $this->class->annotation('property-read', "$hint \$$name $comment");
         }
 
@@ -391,19 +391,23 @@ class Factory
         }
 
         $excludedConstants = [];
+        $columnComments = $model->getHints();
 
         if ($model->hasCustomCreatedAtField()) {
-            $body .= $this->class->constant('CREATED_AT', $model->getCreatedAtField());
+            $comment = $columnComments[$model->getCreatedAtField()];
+            $body .= $this->class->constant('CREATED_AT', $model->getCreatedAtField(), $comment);
             $excludedConstants[] = $model->getCreatedAtField();
         }
 
         if ($model->hasCustomUpdatedAtField()) {
-            $body .= $this->class->constant('UPDATED_AT', $model->getUpdatedAtField());
+            $comment = $columnComments[$model->getUpdatedAtField()];
+            $body .= $this->class->constant('UPDATED_AT', $model->getUpdatedAtField(), $comment);
             $excludedConstants[] = $model->getUpdatedAtField();
         }
 
         if ($model->hasCustomDeletedAtField()) {
-            $body .= $this->class->constant('DELETED_AT', $model->getDeletedAtField());
+            $comment = $columnComments[$model->getDeletedAtField()];
+            $body .= $this->class->constant('DELETED_AT', $model->getDeletedAtField(), $comment);
             $excludedConstants[] = $model->getDeletedAtField();
         }
 
@@ -413,8 +417,9 @@ class Factory
             $properties = array_diff($properties, $excludedConstants);
 
             foreach ($properties as $property) {
+                $comment = $columnComments[$property];
                 $constantName = Str::upper(Str::snake($property));
-                $body .= $this->class->constant($constantName, $property);
+                $body .= $this->class->constant($constantName, $property, $comment);
             }
         }
 
@@ -474,6 +479,7 @@ class Factory
             $body .= $this->class->field('hints', $model->getHints());
         }
 
+        // 現状ここの分岐には入らない
         foreach ($model->getMutations() as $mutation) {
             $body .= $this->class->method('', $mutation->name(), $mutation->body(), ['before' => "\n"]);
         }
