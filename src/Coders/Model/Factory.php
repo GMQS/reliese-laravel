@@ -8,11 +8,16 @@
 namespace Reliese\Coders\Model;
 
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Reliese\Meta\Blueprint;
 use Reliese\Meta\SchemaManager;
 use Reliese\Support\Classify;
+use RuntimeException;
 
 class Factory
 {
@@ -482,6 +487,69 @@ class Factory
         // 現状ここの分岐には入らない
         foreach ($model->getMutations() as $mutation) {
             $body .= $this->class->method('', $mutation->name(), $mutation->body(), ['before' => "\n"]);
+        }
+
+        //publicプロパティは危険なので代わりにgetterメソッドを生成する
+        $comments = $model->getHints();
+        foreach ($model->getProperties() as $name => $hint) {
+            $comment = $comments[$name];
+            $document = <<<EOL
+                /**
+                 * {$comment}
+                 */
+            
+            EOL;
+
+            $pascalName = "get" . Str::studly($name);
+
+            $body .= $this->class->method(
+                $document,
+                $pascalName,
+                "return \$this->{$name};",
+                [
+                    'returnType' => Str::replace('|', ' | ', $hint),
+                ],
+            );
+        }
+
+        //publicプロパティは危険なので代わりにgetterメソッドを生成する
+        foreach ($model->getRelations() as $name => $relation) {
+            $document = match ($relation->returnType()) {
+                BelongsToMany::class,
+                HasMany::class => [
+                    "document" => <<<EOL
+                        /**
+                         * リレーション {$relation->propertyComment()}
+                         *
+                         * @return {$relation->hint()}
+                         */
+
+                    EOL,
+                    "returnType" => "Collection",
+                ],
+                HasOne::class,
+                BelongsTo::class => [
+                    "document" => <<<EOL
+                        /**
+                         * リレーション {$relation->propertyComment()}
+                         */
+
+                    EOL,
+                    "returnType" => $relation->hint(),
+                ],
+                default => throw new RuntimeException("対応していないリレーション型"),
+            };
+
+            $pascalName = "get" . Str::studly($name);
+
+            $body .= $this->class->method(
+                $document["document"],
+                $pascalName,
+                "return \$this->{$name};",
+                [
+                    'returnType' => $document["returnType"],
+                ],
+            );
         }
 
         foreach ($model->getRelations() as $constraint) {
