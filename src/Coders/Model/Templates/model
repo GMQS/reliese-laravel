@@ -6,7 +6,8 @@ namespace {{namespace}};
 
 /**
  * {{description}}
- * {{properties}}
+ *
+ * @mixin {{mixin}}
  *
  * @package {{namespace}}
  */

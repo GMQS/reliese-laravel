@@ -281,7 +281,7 @@ class Model
         if (! empty($column->comment)) {
             $this->hints[$column->name] = $column->comment;
         } else {
-            $this->hints[$column->name] = '[カラムの説明がありません]';
+            $this->hints[$column->name] = $column->name;
         }
 
         // Track PHP type hints

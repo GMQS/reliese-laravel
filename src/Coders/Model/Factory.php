@@ -259,9 +259,9 @@ class Factory
         $template = str_replace('{{class}}', $model->getClassName(), $template);
         $template = str_replace('{{description}}', $model->getDescription(), $template);
 
-        $properties = $this->properties($model);
-        $dependencies = $this->shortenAndExtractImportableDependencies($properties, $model);
-        $template = str_replace('{{properties}}', $properties, $template);
+        $mixinTypeHint = '\Illuminate\Database\Eloquent\Builder<'.$model->getQualifiedUserClassName().'>';
+        $dependencies = $this->shortenAndExtractImportableDependencies($mixinTypeHint, $model);
+        $template = str_replace('{{mixin}}', $mixinTypeHint, $template);
 
         $parentClass = $model->getParentClass();
         $dependencies = array_merge($dependencies, $this->shortenAndExtractImportableDependencies($parentClass, $model));
@@ -489,39 +489,49 @@ class Factory
             $body .= $this->class->method('', $mutation->name(), $mutation->body(), ['before' => "\n"]);
         }
 
-        //publicプロパティは危険なので代わりにgetterメソッドを生成する
+        //publicプロパティは危険なので代わりにgetterメソッドを生成する (プロパティゲッター)
         $comments = $model->getHints();
         foreach ($model->getProperties() as $name => $hint) {
             $comment = $comments[$name];
             $document = <<<EOL
                 /**
-                 * {$comment}
+                 * {$comment}を取得する
+                 *
+                 * @api
+                 *
+                 * @return {$hint} {$comment}
                  */
             
             EOL;
 
             $pascalName = "get" . Str::studly($name);
 
+            $return = str_contains($hint, 'null') === true
+                ? "return \$this->{$name} ?? null;"
+                : "return \$this->{$name} ?? throw new \LogicException(\"プロパティが存在しません\");";
+
             $body .= $this->class->method(
                 $document,
                 $pascalName,
-                "return \$this->{$name};",
+                $return,
                 [
                     'returnType' => Str::replace('|', ' | ', $hint),
                 ],
             );
         }
 
-        //publicプロパティは危険なので代わりにgetterメソッドを生成する
+        //publicプロパティは危険なので代わりにgetterメソッドを生成する (リレーションゲッター)
         foreach ($model->getRelations() as $name => $relation) {
             $document = match ($relation->returnType()) {
                 BelongsToMany::class,
                 HasMany::class => [
                     "document" => <<<EOL
                         /**
-                         * リレーション {$relation->propertyComment()}
+                         * リレーション {$relation->propertyComment()}を取得する
                          *
-                         * @return {$relation->hint()}
+                         * @api
+                         *
+                         * @return {$relation->hint()} リレーション {$relation->propertyComment()}
                          */
 
                     EOL,
@@ -531,7 +541,11 @@ class Factory
                 BelongsTo::class => [
                     "document" => <<<EOL
                         /**
-                         * リレーション {$relation->propertyComment()}
+                         * リレーション {$relation->propertyComment()}を取得する
+                         *
+                         * @api
+                         *
+                         * @return {$relation->hint()} リレーション {$relation->propertyComment()}
                          */
 
                     EOL,
@@ -545,7 +559,7 @@ class Factory
             $body .= $this->class->method(
                 $document["document"],
                 $pascalName,
-                "return \$this->{$name};",
+                "return \$this->{$name} ?? throw new \LogicException(\"プロパティが存在しません\");",
                 [
                     'returnType' => $document["returnType"],
                 ],
