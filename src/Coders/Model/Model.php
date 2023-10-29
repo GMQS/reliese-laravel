@@ -332,7 +332,7 @@ class Model
      *
      * @return string
      */
-    public function phpTypeHint($castType, $nullable)
+    public static function phpTypeHint($castType, $nullable)
     {
         $type = $castType;
 
@@ -347,8 +347,9 @@ class Model
             case 'collection':
                 $type = '\Illuminate\Support\Collection';
                 break;
-            case 'datetime':
-                $type = '\Carbon\Carbon';
+            case 'immutable_datetime':
+            case 'immutable_date':
+                $type = '\Carbon\CarbonImmutable';
                 break;
             case 'binary':
                 $type = 'string';

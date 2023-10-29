@@ -492,32 +492,34 @@ class Factory
         //publicプロパティは危険なので代わりにgetterメソッドを生成する (プロパティゲッター)
         $comments = $model->getHints();
         foreach ($model->getProperties() as $name => $hint) {
-            $comment = $comments[$name];
-            $document = <<<EOL
-                /**
-                 * {$comment}を取得する
-                 *
-                 * @api
-                 *
-                 * @return {$hint} {$comment}
-                 */
-            
-            EOL;
 
-            $pascalName = "get" . Str::studly($name);
+            $body .= (function () use ($comments, $name, $hint): string {
+                $comment = $comments[$name];
+                $document = <<<EOL
+                    /**
+                     * {$comment}を取得する
+                     *
+                     * @api
+                     *
+                     * @return {$hint} {$comment}
+                     */
 
-            $return = str_contains($hint, 'null') === true
-                ? "return \$this->{$name} ?? null;"
-                : "return \$this->{$name} ?? throw new \LogicException(\"プロパティが存在しません\");";
+                EOL;
 
-            $body .= $this->class->method(
-                $document,
-                $pascalName,
-                $return,
-                [
-                    'returnType' => Str::replace('|', ' | ', $hint),
-                ],
-            );
+                $pascalName = "get" . Str::studly($name);
+                $return = str_contains($hint, 'null') === true
+                    ? "return \$this->{$name} ?? null;"
+                    : "return \$this->{$name} ?? throw new \LogicException(\"プロパティが存在しません\");";
+
+                return $this->class->method(
+                    $document,
+                    $pascalName,
+                    $return,
+                    [
+                        'returnType' => Str::replace('|', ' | ', $hint),
+                    ],
+                );
+            })();
         }
 
         //publicプロパティは危険なので代わりにgetterメソッドを生成する (リレーションゲッター)

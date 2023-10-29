@@ -9,6 +9,7 @@ namespace Reliese\Support;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 class Classify
 {
@@ -79,9 +80,15 @@ class Classify
     {
         $visibility = Arr::get($options, 'visibility', 'public');
         $returnType = Arr::get($options, 'returnType', null);
+        $parameters = Arr::get($options, 'parameters', '');
+        if (is_array($parameters) === true) {
+            $parameters = new Collection($parameters);
+            $parameters = $parameters->map(fn($v) => "{$v['type']} \${$v['name']}")->join(', ');
+        }
+
         $formattedReturnType = $returnType ? ': '.$returnType : '';
 
-        return "\n$doc\t$visibility function $name()$formattedReturnType {\n\t\t$body\n\t}\n";
+        return "\n$doc\t$visibility function $name({$parameters})$formattedReturnType {\n\t\t$body\n\t}\n";
     }
 
     public function mixin($class)
