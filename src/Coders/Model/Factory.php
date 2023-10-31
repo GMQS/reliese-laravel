@@ -294,7 +294,7 @@ class Factory
             }
 
             // Do not import classes from same namespace
-            $inCurrentNamespacePattern = str_replace('\\', '\\\\', "/{$model->getBaseNamespace()}\\[a-zA-Z0-9_]*/");
+            $inCurrentNamespacePattern = str_replace('\\', '\\\\', "/{$model->getBaseNamespace()}\\[a-zA-Z0-9_]*$/");
             if (preg_match($inCurrentNamespacePattern, $dependencyClass)) {
                 continue;
             }
