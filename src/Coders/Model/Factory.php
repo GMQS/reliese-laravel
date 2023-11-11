@@ -507,14 +507,11 @@ class Factory
                 EOL;
 
                 $pascalName = "get" . Str::studly($name);
-                $return = str_contains($hint, 'null') === true
-                    ? "return \$this->{$name} ?? null;"
-                    : "return \$this->{$name} ?? throw new \LogicException(\"プロパティが存在しません\");";
 
                 return $this->class->method(
                     $document,
                     $pascalName,
-                    $return,
+                    "return \$this->{$name};",
                     [
                         'returnType' => Str::replace('|', ' | ', $hint),
                     ],
@@ -561,7 +558,7 @@ class Factory
             $body .= $this->class->method(
                 $document["document"],
                 $pascalName,
-                "return \$this->{$name} ?? throw new \LogicException(\"プロパティが存在しません\");",
+                "return \$this->{$name};",
                 [
                     'returnType' => $document["returnType"],
                 ],
