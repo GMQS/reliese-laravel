@@ -83,6 +83,11 @@ class Model
     protected $parentClass;
 
     /**
+     * @var array
+     */
+    protected $authenticatable;
+
+    /**
      * @var bool
      */
     protected $timestamps = true;
@@ -179,6 +184,7 @@ class Model
     {
         $this->withNamespace($this->config('namespace'));
         $this->withParentClass($this->config('parent'));
+        $this->withAuthenticatable($this->config('authenticatable', []));
 
         // Timestamps settings
         $this->withTimestamps($this->config('timestamps.enabled', $this->config('timestamps', true)));
@@ -498,6 +504,20 @@ class Model
     public function withParentClass($parent)
     {
         $this->parentClass = '\\' . ltrim($parent, '\\');
+
+        return $this;
+    }
+
+    /**
+     * @param array{table: non-empty-string, parent?: non-empty-string, alias?: non-empty-string} $authenticatable
+     *
+     * @return void
+     */
+    public function withAuthenticatable($authenticatable)
+    {
+        $this->authenticatable = [
+
+        ];
 
         return $this;
     }
