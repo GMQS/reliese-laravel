@@ -184,7 +184,7 @@ class Model
     {
         $this->withNamespace($this->config('namespace'));
         $this->withParentClass($this->config('parent'));
-        $this->withAuthenticatable($this->config('authenticatable', []));
+        $this->withAuthenticatable($this->config("authenticatable.{$this->blueprint->table()}", []));
 
         // Timestamps settings
         $this->withTimestamps($this->config('timestamps.enabled', $this->config('timestamps', true)));
@@ -515,12 +515,34 @@ class Model
      */
     public function withAuthenticatable($authenticatable)
     {
-        $this->authenticatable = [
+        if ($authenticatable === []) {
+            $this->authenticatable = [];
+            return $this;
+        }
 
-        ];
+        $authenticatable['parent'] = '\\' . ltrim($authenticatable['parent'] ?? Illuminate\Foundation\Auth\User::class, '\\');
+        $this->authenticatable = $authenticatable;
 
         return $this;
     }
+
+    /**
+     * @return array{table: non-empty-string, parent: non-empty-string, alias?: non-empty-string}
+     */
+    public function getAuthenticatable()
+    {
+        return $this->authenticatable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthenticatable()
+    {
+        return $this->authenticatable !== [];
+    }
+
+
 
     /**
      * @return string

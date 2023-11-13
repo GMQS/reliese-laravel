@@ -61,11 +61,10 @@ return [
         */
 
         'authenticatable' => [
-            [
-                'table' => 'teachers',
-                'parent' => Illuminate\Foundation\Auth\User::class,
-                'alias' => 'AuthenticatableUser'
-            ]
+            //'users' => [
+            //    'parent' => Illuminate\Foundation\Auth\User::class,
+            //    'alias' => 'Authenticatable'
+            //],
         ],
 
         /*
