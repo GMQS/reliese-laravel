@@ -263,9 +263,24 @@ class Factory
         $dependencies = $this->shortenAndExtractImportableDependencies($mixinTypeHint, $model);
         $template = str_replace('{{mixin}}', $mixinTypeHint, $template);
 
-        $parentClass = $model->getParentClass();
-        $dependencies = array_merge($dependencies, $this->shortenAndExtractImportableDependencies($parentClass, $model));
-        $template = str_replace('{{parent}}', $parentClass, $template);
+        if ($model->isAuthenticatable() === true) {
+            $authenticatable = $model->getAuthenticatable();
+            $parentClass = $authenticatable['parent'];
+            $dependency = $this->shortenAndExtractImportableDependencies($parentClass, $model);
+            if (isset($authenticatable['alias']) === true) {
+                $arrayKey = ltrim($authenticatable['parent'], '\\');
+                unset($dependency[$arrayKey]);
+                $dependency[$arrayKey . ' as ' . $authenticatable['alias']] = true;
+                $parentClass = $authenticatable['alias'];
+            }
+
+            $dependencies = array_merge($dependencies, $dependency);
+            $template = str_replace('{{parent}}', $parentClass, $template);
+        } else {
+            $parentClass = $model->getParentClass();
+            $dependencies = array_merge($dependencies, $this->shortenAndExtractImportableDependencies($parentClass, $model));
+            $template = str_replace('{{parent}}', $parentClass, $template);
+        }
 
         $body = $this->body($model);
         $dependencies = array_merge($dependencies, $this->shortenAndExtractImportableDependencies($body, $model));
